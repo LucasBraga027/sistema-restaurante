@@ -29,6 +29,7 @@
 </head>
 <body class="bg-gray-50 font-sans">
 <div class="min-h-screen">
+  <!-- Header -->
   <header class="bg-restaurant-blue text-white p-4 shadow-lg">
     <div class="container mx-auto flex justify-between items-center">
       <h1 class="text-2xl font-bold">🍽️ Sistema de Mesas</h1>
@@ -36,19 +37,27 @@
     </div>
   </header>
 
+  <!-- Tabs -->
   <nav class="bg-white shadow-md">
     <div class="container mx-auto">
-      <div class="flex space-x-0">
-        <button data-tab="mesas" class="tab-button px-6 py-3 font-medium rounded-t-lg tab-active">Gerenciar Mesas</button>
-        <button data-tab="pedidos" class="tab-button px-6 py-3 font-medium rounded-t-lg tab-inactive">Pedidos</button>
-        <button data-tab="relatorios" class="tab-button px-6 py-3 font-medium rounded-t-lg tab-inactive">Relatórios</button>
+      <div class="flex flex-wrap">
+        <button data-tab="mesas" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-active">Gerenciar Mesas</button>
+        <button data-tab="pedidos" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Pedidos</button>
+        <button data-tab="relatorios" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Relatórios</button>
+        <button data-tab="fluxo" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Fluxo de Caixa</button>
+        <button data-tab="apagar" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Contas a Pagar</button>
+        <button data-tab="abc" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Análise ABC</button>
+        <button data-tab="estoque" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Estoque</button>
       </div>
     </div>
   </nav>
 
+  <!-- Main -->
   <main class="container mx-auto p-6">
+    <!-- GERENCIAR MESAS -->
     <div id="content-mesas" class="tab-content">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Abrir mesa -->
         <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-restaurant-blue">
           <h2 class="text-xl font-bold text-restaurant-dark mb-4">🆕 Abrir Nova Mesa</h2>
           <div class="space-y-4">
@@ -60,20 +69,24 @@
               <label class="block text-sm font-medium text-gray-700 mb-2">Número da Mesa</label>
               <input type="number" id="tableNumber" class="w-full px-4 py-2 border border-gray-300 rounded-full" placeholder="Ex: 1, 2, 3...">
             </div>
-            <button id="openTableBtn" class="w-full bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-200">
+            <button id="openTableBtn" class="w-full bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full">
               Abrir Mesa
             </button>
           </div>
         </div>
 
+        <!-- Status das mesas -->
         <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
           <h2 class="text-xl font-bold text-restaurant-dark mb-4">📊 Status das Mesas</h2>
           <div id="tablesGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
         </div>
       </div>
     </div>
+
+    <!-- PEDIDOS -->
     <div id="content-pedidos" class="tab-content hidden">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Adicionar pedido -->
         <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-restaurant-yellow">
           <h2 class="text-xl font-bold text-restaurant-dark mb-4">🍕 Adicionar Pedido</h2>
           <div class="space-y-4">
@@ -87,12 +100,12 @@
               <label class="block text-sm font-medium text-gray-700 mb-2">Prato</label>
               <select id="dishSelect" class="w-full px-4 py-2 border border-gray-300 rounded-full">
                 <option value="">Selecione um prato</option>
-                <option value="Hambúrguer Clássico">Hambúrguer Clássico - R$ 25,00</option>
-                <option value="Pizza Margherita">Pizza Margherita - R$ 35,00</option>
-                <option value="Lasanha Bolonhesa">Lasanha Bolonhesa - R$ 28,00</option>
-                <option value="Salmão Grelhado">Salmão Grelhado - R$ 45,00</option>
-                <option value="Risotto de Camarão">Risotto de Camarão - R$ 38,00</option>
-                <option value="Bife à Parmegiana">Bife à Parmegiana - R$ 32,00</option>
+                <option value="Hambúrguer Clássico" data-price="25">Hambúrguer Clássico - R$ 25,00</option>
+                <option value="Pizza Margherita" data-price="35">Pizza Margherita - R$ 35,00</option>
+                <option value="Lasanha Bolonhesa" data-price="28">Lasanha Bolonhesa - R$ 28,00</option>
+                <option value="Salmão Grelhado" data-price="45">Salmão Grelhado - R$ 45,00</option>
+                <option value="Risotto de Camarão" data-price="38">Risotto de Camarão - R$ 38,00</option>
+                <option value="Bife à Parmegiana" data-price="32">Bife à Parmegiana - R$ 32,00</option>
               </select>
             </div>
             <div>
@@ -105,20 +118,18 @@
           </div>
         </div>
 
+        <!-- Status dos pedidos -->
         <div class="bg-white rounded-xl shadow-lg p-6">
           <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-bold text-restaurant-dark">📋 Status de Pedidos</h2>
-            <div>
-              <button id="clearOrdersBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-full text-sm">Limpar Tela</button>
-            </div>
+            <button id="clearOrdersBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-full text-sm">Limpar Tela</button>
           </div>
-          <div id="activeOrders" class="space-y-3 max-h-96 overflow-y-auto">
-            <!-- pedidos -->
-          </div>
+          <div id="activeOrders" class="space-y-3 max-h-96 overflow-y-auto"></div>
         </div>
       </div>
     </div>
 
+    <!-- RELATÓRIOS -->
     <div id="content-relatorios" class="tab-content hidden">
       <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-l-4 border-restaurant-blue">
         <h2 class="text-xl font-bold text-restaurant-dark mb-4">📅 Filtros de Relatório</h2>
@@ -170,10 +181,10 @@
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-restaurant-yellow">
-          <h2 class="text-xl font-bold text-restaurant-dark mb-4">🍽️ Fidelidade & Clientes</h2>
+          <h2 class="text-xl font-bold text-restaurant-dark mb-4">🎁 Fidelidade & Clientes</h2>
           <div class="space-y-4">
             <div class="bg-gray-50 p-4 rounded-lg">
-              <h3 class="font-semibold text-gray-700">Clientes Próximos ao Cupom (gasto &lt; 2000)</h3>
+              <h3 class="font-semibold text-gray-700">Clientes Próximos ao Cupom</h3>
               <div id="loyaltyNearReward" class="text-sm text-gray-600"></div>
             </div>
             <div class="bg-gray-50 p-4 rounded-lg">
@@ -225,16 +236,88 @@
         </div>
       </div>
     </div>
+
+    <!-- FLUXO DE CAIXA -->
+    <div id="content-fluxo" class="tab-content hidden">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-restaurant-dark mb-4">💸 Fluxo de Caixa</h2>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+          <input type="date" id="cashStart" class="px-4 py-2 border rounded-full">
+          <input type="date" id="cashEnd" class="px-4 py-2 border rounded-full">
+          <input type="text" id="cfCategory" placeholder="Categoria (opcional)" class="px-4 py-2 border rounded-full">
+          <input type="number" step="0.01" id="cfAmount" placeholder="Valor (+ = entrada, - = saída)" class="px-4 py-2 border rounded-full">
+          <button id="cfAddBtn" class="bg-restaurant-yellow hover:bg-yellow-500 text-restaurant-dark font-bold py-2 px-4 rounded-full">Lançar Manual</button>
+        </div>
+        <div id="cashflowGrid" class="space-y-2 text-sm"></div>
+      </div>
+    </div>
+
+    <!-- CONTAS A PAGAR -->
+    <div id="content-apagar" class="tab-content hidden">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-restaurant-dark mb-4">📄 Contas a Pagar</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <input id="apVendor" placeholder="Fornecedor" class="px-4 py-2 border rounded-full">
+          <input id="apDue" type="date" class="px-4 py-2 border rounded-full">
+          <input id="apAmount" type="number" step="0.01" placeholder="Valor" class="px-4 py-2 border rounded-full">
+          <button id="apCreateBtn" class="bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Lançar Conta</button>
+        </div>
+        <div id="apList" class="space-y-2 text-sm"></div>
+      </div>
+    </div>
+
+    <!-- ANÁLISE ABC -->
+    <div id="content-abc" class="tab-content hidden">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-restaurant-dark mb-4">🔤 Análise ABC</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <input type="date" id="abcStart" class="px-4 py-2 border rounded-full">
+          <input type="date" id="abcEnd" class="px-4 py-2 border rounded-full">
+          <button id="abcUpdateBtn" class="bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Atualizar</button>
+        </div>
+        <div id="abcTable" class="text-sm"></div>
+      </div>
+    </div>
+
+    <!-- ESTOQUE -->
+    <div id="content-estoque" class="tab-content hidden">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-restaurant-dark mb-4">📦 Controle de Estoque</h2>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+          <input id="stkSearch" placeholder="Buscar/Selecionar item..." class="px-4 py-2 border rounded-full">
+          <input id="stkUnit" placeholder="Unid. (ex: kg, un)" class="px-4 py-2 border rounded-full">
+          <button id="stkNewItem" class="bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Novo Item</button>
+          <select id="stkType" class="px-4 py-2 border rounded-full">
+            <option value="in">Entrada</option>
+            <option value="out">Saída</option>
+            <option value="adjust">Ajuste</option>
+          </select>
+          <div class="flex gap-2">
+            <input id="stkQty" type="number" step="0.01" placeholder="Qtd" class="px-4 py-2 border rounded-full w-full">
+            <button id="stkLaunch" class="bg-restaurant-yellow hover:bg-yellow-500 text-restaurant-dark font-bold py-2 px-4 rounded-full">Lançar</button>
+          </div>
+        </div>
+        <div id="stkList" class="space-y-1 text-sm"></div>
+      </div>
+    </div>
   </main>
 </div>
 
+<!-- Modal -->
 <div id="modalContainer"></div>
+
 <script>
-// estados persistidos
+/* ===================== ESTADO & UTIL ===================== */
 let tables = JSON.parse(localStorage.getItem('restaurantTables')) || {};
 let orders = JSON.parse(localStorage.getItem('restaurantOrders')) || [];
 let orderCounter = parseInt(localStorage.getItem('orderCounter')) || 1;
 let tableHistory = JSON.parse(localStorage.getItem('tableHistory')) || [];
+
+// novos módulos (passo 2):
+let cfEntries = JSON.parse(localStorage.getItem('cfEntries')) || [];          // fluxo de caixa manual
+let apEntries = JSON.parse(localStorage.getItem('apEntries')) || [];          // contas a pagar
+let invItems  = JSON.parse(localStorage.getItem('invItems'))  || [];          // itens de estoque
+let invMoves  = JSON.parse(localStorage.getItem('invMoves'))  || [];          // movimentos
 
 const dishPrices = {
   'Hambúrguer Clássico': 25.00,
@@ -250,7 +333,13 @@ function saveData() {
   localStorage.setItem('restaurantOrders', JSON.stringify(orders));
   localStorage.setItem('orderCounter', orderCounter.toString());
   localStorage.setItem('tableHistory', JSON.stringify(tableHistory));
+  localStorage.setItem('cfEntries', JSON.stringify(cfEntries));
+  localStorage.setItem('apEntries', JSON.stringify(apEntries));
+  localStorage.setItem('invItems', JSON.stringify(invItems));
+  localStorage.setItem('invMoves', JSON.stringify(invMoves));
 }
+
+function toBRL(n){ return 'R$ ' + Number(n||0).toFixed(2); }
 
 function updateDateTime() {
   const now = new Date();
@@ -258,6 +347,7 @@ function updateDateTime() {
   document.getElementById('currentDateTime').textContent = now.toLocaleDateString('pt-BR', options);
 }
 
+/* ===================== MESAS ===================== */
 function openTable() {
   const waiter = document.getElementById('waiterName').value.trim();
   const num = document.getElementById('tableNumber').value.trim();
@@ -286,8 +376,8 @@ function updateTablesGrid() {
         <div class="font-bold text-lg">Mesa ${i}</div>
         <div class="text-sm">Garçom: ${occupied.waiter}</div>
         <div class="text-xs mt-1">${duration}min aberta</div>
-        <div class="text-sm font-semibold">R$ ${occupied.total.toFixed(2)}</div>
-        <button data-close-table="${i}" class="close-table-btn mt-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-xs">
+        <div class="text-sm font-semibold">${toBRL(occupied.total)}</div>
+        <button data-close-table="${i}" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-xs">
           Fechar Mesa
         </button>
       `;
@@ -309,7 +399,7 @@ function showPaymentModal(tableNumber, table) {
     <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
       <h3 class="text-xl font-bold mb-4">Finalizar Mesa ${tableNumber}</h3>
       <div class="mb-4">
-        <p class="text-gray-600">Total: <span class="font-bold text-green-600">R$ ${table.total.toFixed(2)}</span></p>
+        <p class="text-gray-600">Total: <span class="font-bold text-green-600">${toBRL(table.total)}</span></p>
       </div>
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700 mb-2">Forma de Pagamento *</label>
@@ -340,11 +430,14 @@ function confirmTableClose(tableNumber) {
   const customerName = document.getElementById('customerName').value.trim();
   if (!paymentMethod) { alert('Selecione forma de pagamento'); return; }
   if (customerName && !customerName.includes(' ')) { alert('Digite nome e sobrenome'); return; }
+
   const table = tables[tableNumber];
   const closeTime = new Date().toISOString();
   const openTime = new Date(table.openTime);
   const duration = Math.floor((new Date(closeTime)-openTime)/(1000*60));
   const receivingDate = calculateReceivingDate(paymentMethod, closeTime);
+
+  // salva no histórico
   tableHistory.push({
     tableNumber,
     waiter: table.waiter,
@@ -357,13 +450,16 @@ function confirmTableClose(tableNumber) {
     customerName: customerName || null,
     receivingDate
   });
+
+  // apaga mesa
   delete tables[tableNumber];
   saveData();
   closeModal();
   updateTablesGrid();
   updateActiveOrders();
   updateReports();
-  alert(`Mesa ${tableNumber} fechada com sucesso! Total: R$ ${table.total.toFixed(2)}`);
+  // fluxo de caixa: entrada será considerados pelos recebimentos (não lança duplicado aqui)
+  alert(`Mesa ${tableNumber} fechada com sucesso! Total: ${toBRL(table.total)}`);
 }
 
 function calculateReceivingDate(paymentMethod, closeTime) {
@@ -391,12 +487,15 @@ function closeModal() {
   document.getElementById('modalContainer').innerHTML = '';
 }
 
+/* ===================== PEDIDOS ===================== */
 function addOrder() {
   const tableNumber = document.getElementById('orderTableSelect').value;
-  const dish = document.getElementById('dishSelect').value;
+  const dishSel = document.getElementById('dishSelect');
+  const dish = dishSel.value;
+  const price = Number(dishSel.selectedOptions[0]?.dataset.price || dishPrices[dish] || 0);
   const quantity = parseInt(document.getElementById('quantity').value,10);
   if (!tableNumber || !dish || !quantity) { alert('Preencha todos'); return; }
-  const price = dishPrices[dish] || 0;
+
   const total = price * quantity;
   const order = {
     id: orderCounter++,
@@ -409,13 +508,14 @@ function addOrder() {
     status: 'Na cozinha'
   };
   orders.push(order);
+
   if (tables[tableNumber]) {
     tables[tableNumber].orders.push(order);
-    tables[tableNumber].total += total;
+    tables[tableNumber].total = Math.max(0, (tables[tableNumber].total || 0) + total);
   }
+
   saveData();
-  document.getElementById('dishSelect').value='';
-  document.getElementById('quantity').value='1';
+  document.getElementById('dishSelect').value=''; document.getElementById('quantity').value='1';
   updateTablesGrid();
   updateActiveOrders();
   alert('Pedido adicionado com sucesso!');
@@ -430,38 +530,6 @@ function updateOrderTableSelect() {
     opt.textContent = `Mesa ${n} - ${tables[n].waiter}`;
     sel.appendChild(opt);
   });
-}
-
-function updateActiveOrders() {
-  const container = document.getElementById('activeOrders');
-  const all = orders.slice().reverse();
-  if (all.length===0) {
-    container.innerHTML = '<p class="text-gray-500 text-center">Nenhum pedido registrado ainda</p>';
-    return;
-  }
-  container.innerHTML = all.map(order => {
-    const statusColor = getStatusColor(order.status);
-    const statusButtons = getStatusButtons(order);
-    return `
-      <div class="bg-gray-50 p-4 rounded-lg border-l-4 ${statusColor.border}">
-        <div class="flex justify-between items-start">
-          <div class="flex-1">
-            <div class="font-semibold">Mesa ${order.tableNumber} - ${order.dish}</div>
-            <div class="text-sm text-gray-600">Qtd: ${order.quantity} | R$ ${order.total.toFixed(2)}</div>
-            <div class="text-xs text-gray-500">${new Date(order.timestamp).toLocaleTimeString('pt-BR')}</div>
-            <div class="mt-2">
-              <span class="inline-block px-3 py-1 rounded-full text-xs font-medium ${statusColor.bg} ${statusColor.text}">
-                ${order.status}
-              </span>
-            </div>
-          </div>
-          <div class="flex flex-col space-y-1 ml-4">
-            ${statusButtons}
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
 }
 
 function getStatusColor(status) {
@@ -496,6 +564,38 @@ function getStatusButtons(order) {
   }
 }
 
+function updateActiveOrders() {
+  const container = document.getElementById('activeOrders');
+  const all = orders.slice().reverse();
+  if (all.length===0) {
+    container.innerHTML = '<p class="text-gray-500 text-center">Nenhum pedido registrado ainda</p>';
+    return;
+  }
+  container.innerHTML = all.map(order => {
+    const statusColor = getStatusColor(order.status);
+    const statusButtons = getStatusButtons(order);
+    return `
+      <div class="bg-gray-50 p-4 rounded-lg border-l-4 ${statusColor.border}">
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <div class="font-semibold">Mesa ${order.tableNumber} - ${order.dish}</div>
+            <div class="text-sm text-gray-600">Qtd: ${order.quantity} | ${toBRL(order.total)}</div>
+            <div class="text-xs text-gray-500">${new Date(order.timestamp).toLocaleTimeString('pt-BR')}</div>
+            <div class="mt-2">
+              <span class="inline-block px-3 py-1 rounded-full text-xs font-medium ${statusColor.bg} ${statusColor.text}">
+                ${order.status}
+              </span>
+            </div>
+          </div>
+          <div class="flex flex-col space-y-1 ml-4">
+            ${statusButtons}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
 function updateOrderStatus(orderId, newStatus) {
   const idx = orders.findIndex(o => o.id === orderId);
   if (idx !== -1) {
@@ -512,23 +612,32 @@ function cancelOrder(orderId) {
   if (idx === -1) return;
   orders[idx].status = 'Cancelado';
   orders[idx].canceledAt = new Date().toISOString();
+
   const ord = orders[idx];
   if (tables[ord.tableNumber]) {
-    tables[ord.tableNumber].total -= ord.total;
+    tables[ord.tableNumber].total = Math.max(0, (tables[ord.tableNumber].total || 0) - ord.total);
     tables[ord.tableNumber].orders = tables[ord.tableNumber].orders.filter(o => o.id !== orderId);
   }
+
   saveData();
   updateActiveOrders();
   updateTablesGrid();
+
+  // Remove da lista após 5 minutos
   setTimeout(() => {
-    orders = JSON.parse(localStorage.getItem('restaurantOrders')) || [];
-    const filtered = orders.filter(o => o.id !== orderId);
+    const cur = JSON.parse(localStorage.getItem('restaurantOrders')) || [];
+    const filtered = cur.filter(o => o.id !== orderId);
     localStorage.setItem('restaurantOrders', JSON.stringify(filtered));
     orders = filtered;
     updateActiveOrders();
   }, 5 * 60 * 1000);
 }
 
+function clearOrdersDisplay() {
+  document.getElementById('activeOrders').innerHTML = '<p class="text-gray-500 text-center">Tela limpa - pedidos permanecem para relatórios</p>';
+}
+
+/* ===================== RELATÓRIOS ===================== */
 function setupDateFilters() {
   const periodFilter = document.getElementById('periodFilter');
   const customStart = document.getElementById('customDateStart');
@@ -582,27 +691,28 @@ function updateReceivingAnalysis() {
     const recv = new Date(h.receivingDate);
     if (recv >= start && recv <= end) {
       const val = h.total;
-      if (!breakdown[h.paymentMethod]) breakdown[h.paymentMethod] = 0;
-      breakdown[h.paymentMethod] += val;
+      const pm = h.paymentMethod || 'N/D';
+      if (!breakdown[pm]) breakdown[pm] = 0;
+      breakdown[pm] += val;
       if (recv <= now) already += val;
       else toReceive += val;
     }
   });
-  document.getElementById('alreadyReceived').textContent = `R$ ${already.toFixed(2)}`;
-  document.getElementById('toReceive').textContent = `R$ ${toReceive.toFixed(2)}`;
-  document.getElementById('totalPeriodReceiving').textContent = `R$ ${(already+toReceive).toFixed(2)}`;
+  document.getElementById('alreadyReceived').textContent = toBRL(already);
+  document.getElementById('toReceive').textContent = toBRL(toReceive);
+  document.getElementById('totalPeriodReceiving').textContent = toBRL(already+toReceive);
 
-  const parts = Object.entries(breakdown).map(([method,val]) => {
-    return `<div>${method}: R$ ${val.toFixed(2)}</div>`;
-  });
+  const mapName = { credito:'Cartão de Crédito', debito:'Cartão de Débito', pix:'PIX', dinheiro:'Dinheiro', 'N/D':'N/D' };
+  const parts = Object.entries(breakdown).map(([method,val]) => `<div>${mapName[method]||method}: ${toBRL(val)}</div>`);
   document.getElementById('paymentMethodBreakdown').innerHTML = parts.join('');
 }
 
 function updateReports() {
+  // Mesas abertas
   document.getElementById('openTablesReport').innerHTML = Object.keys(tables).length>0 ?
     Object.keys(tables).map(n => `Mesa ${n} - ${tables[n].waiter}`).join('<br>') : 'Nenhuma mesa aberta';
 
-  // === Estatísticas ===
+  // Período
   let periodStart, periodEnd;
   const period = document.getElementById('periodFilter').value;
   const today = new Date();
@@ -610,8 +720,7 @@ function updateReports() {
     periodStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     periodEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
   } else if (period === 'week') {
-    const d = new Date();
-    d.setDate(today.getDate() - 7);
+    const d = new Date(); d.setDate(today.getDate() - 7);
     periodStart = new Date(d.getFullYear(), d.getMonth(), d.getDate());
     periodEnd = new Date();
   } else if (period === 'month') {
@@ -632,86 +741,254 @@ function updateReports() {
     periodEnd = new Date();
   }
 
+  // Fechamentos no período
   const historyInPeriod = tableHistory.filter(h => {
     const close = new Date(h.closeTime);
     return close >= periodStart && close <= periodEnd;
   });
 
+  // Garçons mais ativos
   const waiterCounts = {};
-  historyInPeriod.forEach(h => {
-    if (!waiterCounts[h.waiter]) waiterCounts[h.waiter] = 0;
-    waiterCounts[h.waiter]++;
-  });
-  const sortedWaiters = Object.entries(waiterCounts)
-    .sort((a,b) => b[1] - a[1])
-    .slice(0,5);
-  const activeWaitersHtml = sortedWaiters.length
-    ? sortedWaiters.map(([waiter, count]) => `<div>${waiter}: ${count} mesa(s)</div>`).join('')
-    : '<div>Sem dados</div>';
-  document.getElementById('activeWaiters').innerHTML = activeWaitersHtml;
+  historyInPeriod.forEach(h => { waiterCounts[h.waiter] = (waiterCounts[h.waiter]||0) + 1; });
+  const sortedWaiters = Object.entries(waiterCounts).sort((a,b) => b[1] - a[1]).slice(0,5);
+  document.getElementById('activeWaiters').innerHTML =
+    sortedWaiters.length ? sortedWaiters.map(([waiter, count]) => `<div>${waiter}: ${count} mesa(s)</div>`).join('') : '<div>Sem dados</div>';
 
+  // Tempo médio de ocupação
   if (historyInPeriod.length > 0) {
     const totalMinutes = historyInPeriod.reduce((sum, h) => sum + (h.duration || 0), 0);
     const avg = totalMinutes / historyInPeriod.length;
-    document.getElementById('averageOccupation').innerHTML = `~${Math.round(avg)} min`;
+    document.getElementById('averageOccupation').textContent = `~${Math.round(avg)} min`;
   } else {
-    document.getElementById('averageOccupation').innerHTML = 'Sem dados';
+    document.getElementById('averageOccupation').textContent = 'Sem dados';
   }
 
-  // fidelidade
+  // Fidelidade & clientes
   const clients = {};
   tableHistory.filter(h => h.customerName && h.total >= 0).forEach(h => {
     const name = h.customerName;
-    if (!clients[name]) clients[name] = { spent: 0 };
+    clients[name] = clients[name] || { spent: 0 };
     clients[name].spent += h.total;
   });
+
   const near = [];
   const earned = [];
   for (const [name, data] of Object.entries(clients)) {
     const coupons = Math.floor(data.spent / 2000);
     if (coupons > 0) earned.push({ name, coupons, spent: data.spent });
     const remainder = data.spent % 2000;
-    if (remainder < 2000) near.push({ name, toNext: 2000 - remainder, spent: data.spent });
+    near.push({ name, toNext: 2000 - remainder, spent: data.spent });
   }
   earned.sort((a,b)=>b.coupons - a.coupons);
   near.sort((a,b)=>a.toNext - b.toNext);
-  const nearHtml = near.slice(0,5).map(c=>`<div>${c.name}: falta R$ ${c.toNext.toFixed(2)} (já gastou R$ ${c.spent.toFixed(2)})</div>`).join('');
-  const earnedHtml = earned.slice(0,5).map(c=>`<div>${c.name}: ${c.coupons} cupom(s) (R$ ${c.spent.toFixed(2)})</div>`).join('');
+
+  const nearHtml = near.slice(0,5).map(c=>`<div>${c.name}: falta ${toBRL(c.toNext)} (já gastou ${toBRL(c.spent)})</div>`).join('');
+  const earnedHtml = earned.slice(0,5).map(c=>`<div>${c.name}: ${c.coupons} cupom(s) (${toBRL(c.spent)})</div>`).join('');
   document.getElementById('loyaltyNearReward').innerHTML = nearHtml || '<div>Nenhum cliente próximo</div>';
   document.getElementById('loyaltyRewardsEarned').innerHTML = earnedHtml || '<div>Nenhum cupom conquistado</div>';
 
+  // Recebimentos (com filtro próprio)
   updateReceivingAnalysis();
 }
 
-function updateReceivingAnalysis() {
-  const { start, end } = parseReceivingRange();
-  const now = new Date();
-  let already = 0, toReceive = 0;
-  const breakdown = {};
-  tableHistory.forEach(h => {
-    const recv = new Date(h.receivingDate);
-    if (recv >= start && recv <= end) {
-      const val = h.total;
-      if (!breakdown[h.paymentMethod]) breakdown[h.paymentMethod] = 0;
-      breakdown[h.paymentMethod] += val;
-      if (recv <= now) already += val;
-      else toReceive += val;
+/* ===================== FLUXO DE CAIXA ===================== */
+/* Lógica: Entradas = (1) recebimentos de vendas por receivingDate (tableHistory) + (2) cfEntries positivos.
+   Saídas = (1) cfEntries negativos + (2) AP pagas (paidAt).  */
+function refreshCashflow(){
+  const s = new Date(document.getElementById('cashStart').value);
+  const e = new Date(document.getElementById('cashEnd').value);
+  if (!s || !e || isNaN(+s) || isNaN(+e)) return;
+
+  const dayKey = d => new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0,10);
+  const map = {}; // key: yyyy-mm-dd => {in, out}
+
+  // Recebimentos de vendas
+  tableHistory.forEach(h=>{
+    const d=new Date(h.receivingDate);
+    if (d>=s && d<=e) {
+      const k=dayKey(d);
+      map[k] = map[k] || {in:0,out:0};
+      map[k].in += Number(h.total)||0;
     }
   });
-  document.getElementById('alreadyReceived').textContent = `R$ ${already.toFixed(2)}`;
-  document.getElementById('toReceive').textContent = `R$ ${toReceive.toFixed(2)}`;
-  document.getElementById('totalPeriodReceiving').textContent = `R$ ${(already+toReceive).toFixed(2)}`;
 
-  const parts = Object.entries(breakdown).map(([method,val]) => {
-    return `<div>${method}: R$ ${val.toFixed(2)}</div>`;
+  // Lançamentos manuais (cfEntries)
+  cfEntries.forEach(c=>{
+    const d=new Date(c.date);
+    if (d>=s && d<=e) {
+      const k=dayKey(d);
+      map[k] = map[k] || {in:0,out:0};
+      if (c.amount >= 0) map[k].in  += Number(c.amount)||0;
+      else               map[k].out += Math.abs(Number(c.amount)||0);
+    }
   });
-  document.getElementById('paymentMethodBreakdown').innerHTML = parts.join('');
+
+  // Contas pagas
+  apEntries.filter(a=>a.status==='paid' && a.paidAt).forEach(a=>{
+    const d=new Date(a.paidAt);
+    if (d>=s && d<=e) {
+      const k=dayKey(d);
+      map[k] = map[k] || {in:0,out:0};
+      map[k].out += Number(a.amount)||0;
+    }
+  });
+
+  const days=Object.keys(map).sort();
+  const html = days.length ? days.map(k=>{
+    const incoming = map[k].in||0, outgoing = map[k].out||0, net = incoming - outgoing;
+    return `<div class="flex justify-between bg-gray-50 p-2 rounded">
+      <span>${k.split('-').reverse().join('/')}</span>
+      <span>Entrada: ${toBRL(incoming)} | Saída: ${toBRL(outgoing)} | Saldo: ${toBRL(net)}</span>
+    </div>`;
+  }).join('') : '<div class="text-gray-500">Sem lançamentos no período.</div>';
+
+  document.getElementById('cashflowGrid').innerHTML = html;
 }
 
-function clearOrdersDisplay() {
-  document.getElementById('activeOrders').innerHTML = '<p class="text-gray-500 text-center">Tela limpa - pedidos permanecem para relatórios</p>';
+function addCashflowManual(){
+  const val = Number(document.getElementById('cfAmount').value);
+  if (!val) return alert('Informe um valor (positivo=entrada, negativo=saída).');
+  const cat = document.getElementById('cfCategory').value.trim() || 'Manual';
+  cfEntries.push({ id: Date.now(), date: new Date().toISOString(), amount: val, category: cat });
+  document.getElementById('cfAmount').value=''; document.getElementById('cfCategory').value='';
+  saveData(); refreshCashflow();
 }
 
+/* ===================== CONTAS A PAGAR ===================== */
+function refreshAP(){
+  // marca vencidas
+  const today = new Date();
+  apEntries.forEach(a=>{
+    if (a.status==='open' && new Date(a.dueDate) < new Date(today.toDateString())) a.status='overdue';
+  });
+  saveData();
+
+  const list = apEntries.slice().sort((a,b)=> new Date(a.dueDate)-new Date(b.dueDate));
+  document.getElementById('apList').innerHTML = list.length ? list.map(a=>`
+    <div class="flex items-center justify-between bg-gray-50 p-2 rounded">
+      <div>${a.vendor} — vence ${new Date(a.dueDate).toLocaleDateString('pt-BR')} — ${toBRL(a.amount)} — <span class="${a.status==='overdue'?'text-red-600 font-semibold':''}">${a.status}</span></div>
+      ${a.status!=='paid' ? `<button data-ap-pay="${a.id}" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-xs">Pagar</button>`:''}
+    </div>`).join('') : '<div class="text-gray-500">Nenhuma conta cadastrada.</div>';
+}
+
+function createAP(){
+  const vendor=document.getElementById('apVendor').value.trim();
+  const due=document.getElementById('apDue').value;
+  const amt=Number(document.getElementById('apAmount').value);
+  if(!vendor||!due||!amt) return alert('Preencha fornecedor, vencimento e valor.');
+  apEntries.push({ id: Date.now(), vendor, dueDate: due, amount: amt, status:'open', paidAt:null });
+  document.getElementById('apVendor').value=''; document.getElementById('apAmount').value='';
+  saveData(); refreshAP();
+}
+
+function payAP(id){
+  const idx=apEntries.findIndex(a=>a.id==id);
+  if (idx<0) return;
+  apEntries[idx].status='paid';
+  apEntries[idx].paidAt=new Date().toISOString();
+  saveData(); refreshAP(); refreshCashflow();
+}
+
+/* ===================== ABC ===================== */
+function refreshABC(){
+  const s = new Date(document.getElementById('abcStart').value);
+  const e = new Date(document.getElementById('abcEnd').value);
+  if (!s || !e || isNaN(+s) || isNaN(+e)) return;
+
+  // consolida vendas do histórico (fechadas) no intervalo por produto
+  const sales = {};
+  tableHistory.forEach(h=>{
+    const closed=new Date(h.closeTime);
+    if (closed>=s && closed<=e && Array.isArray(h.orders)) {
+      h.orders.forEach(o=>{
+        const name=o.dish || o.name || '(pedido)';
+        const qty = Number(o.quantity||o.qty||0);
+        const val = Number(qty * (o.price || dishPrices[name] || 0));
+        if (!sales[name]) sales[name]={units:0,value:0};
+        sales[name].units += qty;
+        sales[name].value += val;
+      });
+    }
+  });
+
+  const rows = Object.entries(sales).map(([name,v])=>({name, ...v}))
+                .sort((a,b)=>b.value-a.value);
+
+  const totalValue = rows.reduce((s,x)=>s+x.value,0);
+  let running=0;
+  rows.forEach(r=>{ running += r.value; r.cumPct = totalValue? (running/totalValue)*100 : 0;
+    r.cls = r.cumPct<=80 ? 'A' : r.cumPct<=95 ? 'B' : 'C';
+    // estoque atual (se existir item com mesmo nome)
+    const it = invItems.find(i=>i.name.toLowerCase()===r.name.toLowerCase());
+    r.stock = it ? (Number(it.qty)||0) + ' ' + (it.unit||'') : '-';
+  });
+
+  document.getElementById('abcTable').innerHTML = rows.length ? `
+    <div class="grid grid-cols-6 font-semibold mb-2"><div>Produto</div><div>Unidades</div><div>Valor</div><div>% Acum.</div><div>Classe</div><div>Estoque</div></div>
+    ${rows.map(x=>`
+      <div class="grid grid-cols-6 border-b py-1">
+        <div>${x.name}</div>
+        <div>${x.units}</div>
+        <div>${toBRL(x.value)}</div>
+        <div>${x.cumPct.toFixed(1)}%</div>
+        <div>${x.cls}</div>
+        <div>${x.stock}</div>
+      </div>`).join('')}
+  ` : '<div class="text-gray-500">Sem dados no período.</div>';
+}
+
+/* ===================== ESTOQUE ===================== */
+function ensureSampleStock(){
+  if (invItems.length===0){
+    invItems = [
+      { id: Date.now()-1, sku:'HAM001', name:'Hambúrguer Clássico', unit:'un', qty: 20 },
+      { id: Date.now()-2, sku:'PIZ001', name:'Pizza Margherita', unit:'un', qty: 15 }
+    ];
+    saveData();
+  }
+}
+
+function renderStockList(){
+  const term=(document.getElementById('stkSearch').value||'').toLowerCase();
+  const view=invItems.filter(i=>!term || i.name.toLowerCase().includes(term) || (i.sku||'').toLowerCase().includes(term));
+  document.getElementById('stkList').innerHTML = view.length ? view.map(i=>`
+    <div class="flex justify-between bg-gray-50 p-2 rounded">
+      <span><b>${i.name}</b> ${i.sku?`<span class="text-gray-500">(${i.sku})</span>`:''} — ${i.qty} ${i.unit||''}</span>
+      <button data-stk-pick='${JSON.stringify(i)}' class="bg-restaurant-blue hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs">Selecionar</button>
+    </div>`).join('') : '<div class="text-gray-500">Nenhum item encontrado.</div>';
+}
+
+let selectedItem=null;
+function createNewItem(){
+  const name=(document.getElementById('stkSearch').value||'').trim();
+  const unit=(document.getElementById('stkUnit').value||'').trim();
+  if (!name) return alert('Digite um nome no campo de busca para criar o item.');
+  const exists = invItems.some(i=>i.name.toLowerCase()===name.toLowerCase());
+  if (exists) return alert('Já existe um item com esse nome. Selecione-o na lista.');
+  const it = { id: Date.now(), sku: null, name, unit: unit||'un', qty: 0 };
+  invItems.push(it); saveData(); renderStockList();
+  alert('Item criado. Agora selecione e lance a movimentação.');
+}
+
+function launchStockMove(){
+  if (!selectedItem) return alert('Selecione um item na lista.');
+  const type=document.getElementById('stkType').value;
+  const qty=Number(document.getElementById('stkQty').value);
+  if (!qty) return alert('Informe a quantidade.');
+  invMoves.push({ id: Date.now(), itemId: selectedItem.id, type, qty, reason:'App', createdAt:new Date().toISOString() });
+  // aplica saldo
+  const idx=invItems.findIndex(i=>i.id===selectedItem.id);
+  if (idx>-1){
+    if (type==='in' || type==='adjust') invItems[idx].qty = Number(invItems[idx].qty||0) + qty;
+    else invItems[idx].qty = Number(invItems[idx].qty||0) - qty;
+    if (invItems[idx].qty<0) invItems[idx].qty=0;
+  }
+  selectedItem=null; document.getElementById('stkQty').value='';
+  saveData(); renderStockList();
+  alert('Movimentação registrada!');
+}
+
+/* ===================== TABS & EVENTOS ===================== */
 function showTab(name) {
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.add('hidden'));
   document.querySelectorAll('.tab-button').forEach(b=> {
@@ -727,11 +1004,20 @@ function showTab(name) {
   } else if (name==='pedidos') {
     updateOrderTableSelect();
     updateActiveOrders();
+  } else if (name==='fluxo') {
+    refreshCashflow();
+  } else if (name==='apagar') {
+    refreshAP();
+  } else if (name==='abc') {
+    refreshABC();
+  } else if (name==='estoque') {
+    renderStockList();
   }
 }
 
-// delegação centralizada de eventos
+// Delegação centralizada de cliques
 document.addEventListener('click', (e) => {
+  // Fechar mesa
   const closeBtn = e.target.closest('[data-close-table]');
   if (closeBtn) {
     const n = parseInt(closeBtn.dataset.closeTable,10);
@@ -741,12 +1027,24 @@ document.addEventListener('click', (e) => {
     }
     return;
   }
+  // Confirmar modal de fechamento
+  const confirmBtn = e.target.closest('[data-confirm-close]');
+  if (confirmBtn) {
+    const tableNum = parseInt(confirmBtn.dataset.confirmClose,10);
+    confirmTableClose(tableNum);
+    return;
+  }
+  // Fechar modal
+  if (e.target.closest('[data-close-modal]')) { closeModal(); return; }
+
+  // Pedidos: cancelar
   const cancelBtn = e.target.closest('[data-cancel-order]');
   if (cancelBtn) {
     const id = parseInt(cancelBtn.dataset.cancelOrder,10);
     cancelOrder(id);
     return;
   }
+  // Pedidos: mudar status
   const updateBtn = e.target.closest('[data-update-status]');
   if (updateBtn) {
     try {
@@ -755,18 +1053,17 @@ document.addEventListener('click', (e) => {
     } catch {}
     return;
   }
-  if (e.target.closest('[data-confirm-close]')) {
-    const tableNum = parseInt(e.target.closest('[data-confirm-close]').dataset.confirmClose,10);
-    confirmTableClose(tableNum);
-    return;
-  }
-  if (e.target.closest('[data-close-modal]')) {
-    closeModal();
-    return;
-  }
+
+  // AP: pagar
+  const apPay=e.target.closest('[data-ap-pay]');
+  if (apPay){ payAP(Number(apPay.dataset.apPay)); return; }
+
+  // Estoque: selecionar item
+  const sel=e.target.closest('[data-stk-pick]');
+  if(sel){ selectedItem=JSON.parse(sel.dataset.stkPick); document.getElementById('stkSearch').value=selectedItem.name; return; }
 });
 
-// inicialização
+// Inicialização
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.tab-button').forEach(b=> b.addEventListener('click', (e)=> {
     const tab = e.currentTarget.getAttribute('data-tab');
@@ -775,33 +1072,54 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('openTableBtn').addEventListener('click', openTable);
   document.getElementById('addOrderBtn').addEventListener('click', addOrder);
   document.getElementById('clearOrdersBtn').addEventListener('click', clearOrdersDisplay);
+
   document.getElementById('periodFilter').addEventListener('change', ()=> { setupDateFilters(); updateReports(); });
   document.getElementById('updateReportsBtn').addEventListener('click', updateReports);
+
   document.getElementById('receivingPeriodFilter').addEventListener('change', ()=> {
     const val = document.getElementById('receivingPeriodFilter').value;
-    if (val==='custom-receiving') document.getElementById('customReceivingDates').classList.remove('hidden');
-    else document.getElementById('customReceivingDates').classList.add('hidden');
+    document.getElementById('customReceivingDates').classList.toggle('hidden', val!=='custom-receiving');
     updateReceivingAnalysis();
   });
   document.getElementById('receivingStartDate').addEventListener('change', updateReceivingAnalysis);
   document.getElementById('receivingEndDate').addEventListener('change', updateReceivingAnalysis);
 
-  updateDateTime();
+  // Fluxo de caixa
+  document.getElementById('cfAddBtn').addEventListener('click', addCashflowManual);
+  document.getElementById('cashStart').addEventListener('change', refreshCashflow);
+  document.getElementById('cashEnd').addEventListener('change', refreshCashflow);
+
+  // Contas a pagar
+  document.getElementById('apCreateBtn').addEventListener('click', createAP);
+
+  // ABC
+  document.getElementById('abcUpdateBtn').addEventListener('click', refreshABC);
+
+  // Estoque
+  ensureSampleStock();
+  document.getElementById('stkSearch').addEventListener('input', renderStockList);
+  document.getElementById('stkNewItem').addEventListener('click', createNewItem);
+  document.getElementById('stkLaunch').addEventListener('click', launchStockMove);
+
+  // datas default
+  const today=new Date(); const weekAgo=new Date(); weekAgo.setDate(today.getDate()-7);
+  document.getElementById('cashStart').value = weekAgo.toISOString().split('T')[0];
+  document.getElementById('cashEnd').value   = today.toISOString().split('T')[0];
+  document.getElementById('abcStart').value  = weekAgo.toISOString().split('T')[0];
+  document.getElementById('abcEnd').value    = today.toISOString().split('T')[0];
+
+  updateDateTime(); setInterval(updateDateTime,60000);
   updateTablesGrid();
   updateOrderTableSelect();
   updateActiveOrders();
   updateReports();
-  setInterval(updateDateTime,60000);
+  refreshCashflow();
+  refreshAP();
+  refreshABC();
+  renderStockList();
 });
 
-// compatibilidade legacy: fallback seguro
-window.closeTable = function(tableNumber) {
-  if (tables[tableNumber]) {
-    if (confirm('Tem certeza que deseja fechar essa mesa?')) {
-      showPaymentModal(tableNumber, tables[tableNumber]);
-    }
-  }
-};
+// compat legacy (se chamar no HTML por acidente)
 window.cancelOrder = cancelOrder;
 window.updateOrderStatus = updateOrderStatus;
 window.confirmTableClose = confirmTableClose;
@@ -809,3 +1127,4 @@ window.closeModal = closeModal;
 </script>
 </body>
 </html>
+
