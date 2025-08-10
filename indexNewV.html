@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sistema de Mesas - Restaurante</title>
+<meta name="description" content="Sistema completo de gerenciamento de mesas para restaurantes">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍽️</text></svg>">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'restaurant-blue': '#1e40af',
+          'restaurant-yellow': '#fbbf24',
+          'restaurant-dark': '#1f2937'
+        }
+      }
+    }
+  };
+</script>
+<style>
+.tab-active { background-color: #1e40af; color:white; }
+.tab-inactive { background-color: #f3f4f6; color:#374151; }
+.table-occupied { background-color: #fbbf24; border-color: #f59e0b; }
+.table-free { background-color: #10b981; border-color: #059669; }
+</style>
+</head>
+<body class="bg-gray-50 font-sans">
+<div class="min-h-screen">
+  <!-- Header -->
+  <header class="bg-restaurant-blue text-white p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">🍽️ Sistema de Mesas</h1>
+      <div class="text-sm"><span id="currentDateTime"></span></div>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="bg-white shadow-md">
+    <div class="container mx-auto">
+      <div class="flex space-x-0">
+        <button data-tab="mesas" class="tab-button px-6 py-3 font-medium rounded-t-lg tab-active">Gerenciar Mesas</button>
+        <button data-tab="pedidos" class="tab-button px-6 py-3 font-medium rounded-t-lg tab-inactive">Pedidos</button>
+        <button data-tab="relatorios" class="tab-button px-6 py-3 font-medium rounded-t-lg tab-inactive">Relatórios</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="container mx-auto p-6">
+    <!-- GERENCIAR MESAS -->
+    <div id="content-mesas" class="tab-content">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Abrir mesa -->
+        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-restaurant-blue">
+          <h2 class="text-xl font-bold text-restaurant-dark mb-4">🆕 Abrir Nova Mesa</h2>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Garçom</label>
+              <input type="text" id="waiterName" class="w-full px-4 py-2 border border-gray-300 rounded-full" placeholder="Digite o nome do garçom">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Número da Mesa</label>
+              <input type="number" id="tableNumber" class="w-full px-4 py-2 border border-gray-300 rounded-full" placeholder="Ex: 1, 2, 3...">
+            </div>
+            <button id="openTableBtn" class="w-full bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-200">
+              Abrir Mesa
+            </button>
+          </div>
+        </div>
+
+        <!-- Status das mesas -->
+        <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+          <h2 class="text-xl font-bold text-restaurant-dark mb-4">📊 Status das Mesas</h2>
+          <div id="tablesGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PEDIDOS -->
+    <div id="content-pedidos" class="tab-content hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Adicionar pedido -->
+        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-restaurant-yellow">
+          <h2 class="text-xl font-bold text-restaurant-dark mb-4">🍕 Adicionar Pedido</h2>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Mesa</label>
+              <select id="orderTableSelect" class="w-full px-4 py-2 border border-gray-300 rounded-full">
+                <option value="">Selecione uma mesa</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Prato</label>
+              <select id="dishSelect" class="w-full px-4 py-2 border border-gray-300 rounded-full">
+                <option value="">Selecione um prato</option>
+                <option value="Hambúrguer Clássico">Hambúrguer Clássico - R$ 25,00</option>
+                <option value="Pizza Margherita">Pizza Margherita - R$ 35,00</option>
+                <option value="Lasanha Bolonhesa">Lasanha Bolonhesa - R$ 28,00</option>
+                <option value="Salmão Grelhado">Salmão Grelhado - R$ 45,00</option>
+                <option value="Risotto de Camarão">Risotto de Camarão - R$ 38,00</option>
+                <option value="Bife à Parmegiana">Bife à Parmegiana - R$ 32,00</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Quantidade</label>
+              <input type="number" id="quantity" value="1" min="1" class="w-full px-4 py-2 border border-gray-300 rounded-full">
+            </div>
+            <button id="addOrderBtn" class="w-full bg-restaurant-yellow hover:bg-yellow-500 text-restaurant-dark font-bold py-3 px-6 rounded-full">
+              Adicionar Pedido
+            </button>
+          </div>
+        </div>
+
+        <!-- Status dos pedidos -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-restaurant-dark">📋 Status de Pedidos</h2>
+            <button id="clearOrdersBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-full text-sm">Limpar Tela</button>
+          </div>
+          <div id="activeOrders" class="space-y-3 max-h-96 overflow-y-auto"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RELATÓRIOS -->
+    <div id="content-relatorios" class="tab-content hidden">
+      <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-l-4 border-restaurant-blue">
+        <h2 class="text-xl font-bold text-restaurant-dark mb-4">📅 Filtros de Relatório</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Período</label>
+            <select id="periodFilter" class="w-full px-4 py-2 border border-gray-300 rounded-full">
+              <option value="today">Hoje</option>
+              <option value="week">Esta Semana</option>
+              <option value="month">Este Mês</option>
+              <option value="year">Este Ano</option>
+              <option value="custom">Período Personalizado</option>
+            </select>
+          </div>
+          <div id="customDateStart" class="hidden">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Data Inicial</label>
+            <input type="date" id="startDate" class="w-full px-4 py-2 border border-gray-300 rounded-full">
+          </div>
+          <div id="customDateEnd" class="hidden">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Data Final</label>
+            <input type="date" id="endDate" class="w-full px-4 py-2 border border-gray-300 rounded-full">
+          </div>
+          <div class="flex items-end">
+            <button id="updateReportsBtn" class="w-full bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+              Atualizar Relatórios
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
+          <h2 class="text-xl font-bold text-restaurant-dark mb-4">🟢 Mesas Abertas Agora</h2>
+          <div id="openTablesReport" class="space-y-2"></div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
+          <h2 class="text-xl font-bold text-restaurant-dark mb-4">📈 Estatísticas</h2>
+          <div class="space-y-4">
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="font-semibold text-gray-700">Garçons Mais Ativos</h3>
+              <div id="activeWaiters" class="text-sm text-gray-600 mt-2"></div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="font-semibold text-gray-700">Tempo Médio de Ocupação</h3>
+              <div id="averageOccupation" class="text-sm text-gray-600 mt-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-restaurant-yellow">
+          <h2 class="text-xl font-bold text-restaurant-dark mb-4">🍽️ Fidelidade & Clientes</h2>
+          <div class="space-y-4">
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="font-semibold text-gray-700">Clientes Próximos ao Cupom (gasto &lt; 2000)</h3>
+              <div id="loyaltyNearReward" class="text-sm text-gray-600"></div>
+            </div>
+            <div class="bg-gray-50 p-4 rounded-lg">
+              <h3 class="font-semibold text-gray-700">Cupons Conquistados</h3>
+              <div id="loyaltyRewardsEarned" class="text-sm text-gray-600"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
+          <h2 class="text-xl font-bold text-restaurant-dark mb-4">💳 Recebimentos</h2>
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Período de Análise</label>
+            <select id="receivingPeriodFilter" class="w-full px-4 py-2 border border-gray-300 rounded-full">
+              <option value="current-month">Mês Atual</option>
+              <option value="next-month">Próximo Mês</option>
+              <option value="next-3-months">Próximos 3 Meses</option>
+              <option value="custom-receiving">Período Personalizado</option>
+            </select>
+          </div>
+          <div id="customReceivingDates" class="hidden mb-4 grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Data Inicial</label>
+              <input type="date" id="receivingStartDate" class="w-full px-4 py-2 border border-gray-300 rounded-full">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Data Final</label>
+              <input type="date" id="receivingEndDate" class="w-full px-4 py-2 border border-gray-300 rounded-full">
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+              <span class="font-medium">💰 Já Recebido</span>
+              <span id="alreadyReceived" class="text-sm font-bold">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+              <span class="font-medium">⏳ A Receber</span>
+              <span id="toReceive" class="text-sm font-bold">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+              <span class="font-medium">📊 Total do Período</span>
+              <span id="totalPeriodReceiving" class="text-sm font-bold">R$ 0,00</span>
+            </div>
+          </div>
+          <div class="mt-4">
+            <h3 class="font-semibold text-gray-700 mb-2">Detalhamento por Forma de Pagamento</h3>
+            <div id="paymentMethodBreakdown" class="space-y-2 text-sm"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal -->
+<div id="modalContainer"></div>
+<script>
+/* ===================== ESTADO & UTIL ===================== */
+let tables = JSON.parse(localStorage.getItem('restaurantTables')) || {};
+let orders = JSON.parse(localStorage.getItem('restaurantOrders')) || [];
+let orderCounter = parseInt(localStorage.getItem('orderCounter')) || 1;
+let tableHistory = JSON.parse(localStorage.getItem('tableHistory')) || [];
+
+const dishPrices = {
+  'Hambúrguer Clássico': 25.00,
+  'Pizza Margherita': 35.00,
+  'Lasanha Bolonhesa': 28.00,
+  'Salmão Grelhado': 45.00,
+  'Risotto de Camarão': 38.00,
+  'Bife à Parmegiana': 32.00
+};
+
+function saveData() {
+  localStorage.setItem('restaurantTables', JSON.stringify(tables));
+  localStorage.setItem('restaurantOrders', JSON.stringify(orders));
+  localStorage.setItem('orderCounter', orderCounter.toString());
+  localStorage.setItem('tableHistory', JSON.stringify(tableHistory));
+}
+
+function toBRL(n){ return 'R$ ' + Number(n||0).toFixed(2); }
+
+function updateDateTime() {
+  const now = new Date();
+  const options = { weekday:'long', year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' };
+  document.getElementById('currentDateTime').textContent = now.toLocaleDateString('pt-BR', options);
+}
+
+/* ===================== MESAS ===================== */
+function openTable() {
+  const waiter = document.getElementById('waiterName').value.trim();
+  const num = document.getElementById('tableNumber').value.trim();
+  if (!waiter || !num) { alert('Preencha todos os campos'); return; }
+  if (tables[num]) { alert('Mesa já ocupada'); return; }
+  tables[num] = { waiter, openTime: new Date().toISOString(), orders: [], total: 0 };
+  saveData();
+  document.getElementById('waiterName').value=''; document.getElementById('tableNumber').value='';
+  updateTablesGrid();
+  alert('Mesa ' + num + ' aberta com sucesso!');
+}
+
+function updateTablesGrid() {
+  const grid = document.getElementById('tablesGrid');
+  grid.innerHTML = '';
+  for (let i=1;i<=12;i++) {
+    const occupied = tables[i];
+    const div = document.createElement('div');
+    const isOccupied = !!occupied;
+    div.className = "p-4 rounded-xl border-2 text-center cursor-pointer transition duration-200 " +
+      (isOccupied ? "table-occupied text-restaurant-dark" : "table-free text-white");
+    if (isOccupied) {
+      const openTime = new Date(occupied.openTime);
+      const duration = Math.floor((new Date() - openTime)/(1000*60));
+      div.innerHTML = `
+        <div class="font-bold text-lg">Mesa ${i}</div>
+        <div class="text-sm">Garçom: ${occupied.waiter}</div>
+        <div class="text-xs mt-1">${duration}min aberta</div>
+        <div class="text-sm font-semibold">${toBRL(occupied.total)}</div>
+        <button data-close-table="${i}" class="mt-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-xs">
+          Fechar Mesa
+        </button>
+      `;
+    } else {
+      div.innerHTML = `
+        <div class="font-bold text-lg">Mesa ${i}</div>
+        <div class="text-sm">Livre</div>
+      `;
+    }
+    grid.appendChild(div);
+  }
+  updateOrderTableSelect();
+}
+
+function showPaymentModal(tableNumber, table) {
+  const modalContainer = document.getElementById('modalContainer');
+  modalContainer.innerHTML = `
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+      <h3 class="text-xl font-bold mb-4">Finalizar Mesa ${tableNumber}</h3>
+      <div class="mb-4">
+        <p class="text-gray-600">Total: <span class="font-bold text-green-600">${toBRL(table.total)}</span></p>
+      </div>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Forma de Pagamento *</label>
+        <select id="paymentMethod" class="w-full px-4 py-2 border border-gray-300 rounded-full">
+          <option value="">Selecione</option>
+          <option value="credito">Cartão de Crédito</option>
+          <option value="debito">Cartão de Débito</option>
+          <option value="pix">PIX</option>
+          <option value="dinheiro">Dinheiro</option>
+        </select>
+      </div>
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Nome Completo do Cliente (Opcional)</label>
+        <input type="text" id="customerName" placeholder="Nome e sobrenome" class="w-full px-4 py-2 border border-gray-300 rounded-full">
+        <p class="text-xs text-gray-500 mt-1">Para participar da fidelidade é obrigatório nome e sobrenome.</p>
+      </div>
+      <div class="flex space-x-3">
+        <button data-confirm-close="${tableNumber}" class="flex-1 bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Confirmar</button>
+        <button data-close-modal class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-full">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  `;
+}
+
+function confirmTableClose(tableNumber) {
+  const paymentMethod = document.getElementById('paymentMethod').value;
+  const customerName = document.getElementById('customerName').value.trim();
+  if (!paymentMethod) { alert('Selecione forma de pagamento'); return; }
+  if (customerName && !customerName.includes(' ')) { alert('Digite nome e sobrenome'); return; }
+
+  const table = tables[tableNumber];
+  const closeTime = new Date().toISOString();
+  const openTime = new Date(table.openTime);
+  const duration = Math.floor((new Date(closeTime)-openTime)/(1000*60));
+  const receivingDate = calculateReceivingDate(paymentMethod, closeTime);
+
+  tableHistory.push({
+    tableNumber,
+    waiter: table.waiter,
+    openTime: table.openTime,
+    closeTime,
+    duration,
+    total: table.total,
+    orders: table.orders,
+    paymentMethod,
+    customerName: customerName || null,
+    receivingDate
+  });
+
+  delete tables[tableNumber];
+  saveData();
+  closeModal();
+  updateTablesGrid();
+  updateActiveOrders();
+  updateReports();              // <- garante atualização imediata
+  alert(`Mesa ${tableNumber} fechada com sucesso! Total: ${toBRL(table.total)}`);
+}
+
+function calculateReceivingDate(paymentMethod, closeTime) {
+  const closeDate = new Date(closeTime);
+  switch(paymentMethod) {
+    case 'credito': {
+      const creditDate = new Date(closeDate.getFullYear(), closeDate.getMonth(), 30);
+      if (closeDate.getDate() > 30) creditDate.setMonth(creditDate.getMonth()+1);
+      return creditDate.toISOString();
+    }
+    case 'debito': {
+      const debitDate = new Date(closeDate);
+      debitDate.setDate(debitDate.getDate()+1);
+      return debitDate.toISOString();
+    }
+    case 'pix':
+    case 'dinheiro':
+      return closeTime;
+    default:
+      return closeTime;
+  }
+}
+
+function closeModal() {
+  document.getElementById('modalContainer').innerHTML = '';
+}
+
+/* ===================== PEDIDOS ===================== */
+function addOrder() {
+  const tableNumber = document.getElementById('orderTableSelect').value;
+  const dish = document.getElementById('dishSelect').value;
+  const quantity = parseInt(document.getElementById('quantity').value,10);
+  if (!tableNumber || !dish || !quantity) { alert('Preencha todos'); return; }
+
+  const price = dishPrices[dish] || 0;
+  const total = price * quantity;
+  const order = {
+    id: orderCounter++,
+    tableNumber,
+    dish,
+    quantity,
+    price,
+    total,
+    timestamp: new Date().toISOString(),
+    status: 'Na cozinha'
+  };
+  orders.push(order);
+
+  if (tables[tableNumber]) {
+    tables[tableNumber].orders.push(order);
+    tables[tableNumber].total = Math.max(0, (tables[tableNumber].total || 0) + total);
+  }
+
+  saveData();
+  document.getElementById('dishSelect').value=''; document.getElementById('quantity').value='1';
+  updateTablesGrid();
+  updateActiveOrders();
+  alert('Pedido adicionado com sucesso!');
+}
+
+function updateOrderTableSelect() {
+  const sel = document.getElementById('orderTableSelect');
+  sel.innerHTML = '<option value="">Selecione uma mesa</option>';
+  Object.keys(tables).forEach(n => {
+    const opt = document.createElement('option');
+    opt.value = n;
+    opt.textContent = `Mesa ${n} - ${tables[n].waiter}`;
+    sel.appendChild(opt);
+  });
+}
+
+function getStatusColor(status) {
+  switch(status) {
+    case 'Na cozinha': return { border:'border-orange-400', bg:'bg-orange-100', text:'text-orange-800' };
+    case 'Entregue': return { border:'border-green-400', bg:'bg-green-100', text:'text-green-800' };
+    case 'Concluído': return { border:'border-gray-400', bg:'bg-gray-100', text:'text-gray-800' };
+    case 'Cancelado': return { border:'border-red-400', bg:'bg-red-100', text:'text-red-800' };
+    default: return { border:'border-blue-400', bg:'bg-blue-100', text:'text-blue-800' };
+  }
+}
+
+function getStatusButtons(order) {
+  switch(order.status) {
+    case 'Na cozinha':
+      return `
+        <button data-update-status='${JSON.stringify({id: order.id, to: "Entregue"})}' class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-xs">Entregar</button>
+        <button data-cancel-order="${order.id}" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-xs">Cancelar</button>
+      `;
+    case 'Entregue':
+      return `
+        <button data-update-status='${JSON.stringify({id: order.id, to: "Concluído"})}' class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-full text-xs">Concluir</button>
+        <button data-update-status='${JSON.stringify({id: order.id, to: "Na cozinha"})}' class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-full text-xs">Voltar</button>
+        <button data-cancel-order="${order.id}" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-full text-xs">Cancelar</button>
+      `;
+    case 'Concluído':
+      return `<button data-update-status='${JSON.stringify({id: order.id, to: "Na cozinha"})}' class="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-full text-xs">Reabrir</button>`;
+    case 'Cancelado':
+      return `<span class="text-red-500 text-xs">Cancelado</span>`;
+    default:
+      return '';
+  }
+}
+
+function updateActiveOrders() {
+  const container = document.getElementById('activeOrders');
+  const all = orders.slice().reverse();
+  if (all.length===0) {
+    container.innerHTML = '<p class="text-gray-500 text-center">Nenhum pedido registrado ainda</p>';
+    return;
+  }
+  container.innerHTML = all.map(order => {
+    const statusColor = getStatusColor(order.status);
+    const statusButtons = getStatusButtons(order);
+    return `
+      <div class="bg-gray-50 p-4 rounded-lg border-l-4 ${statusColor.border}">
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <div class="font-semibold">Mesa ${order.tableNumber} - ${order.dish}</div>
+            <div class="text-sm text-gray-600">Qtd: ${order.quantity} | ${toBRL(order.total)}</div>
+            <div class="text-xs text-gray-500">${new Date(order.timestamp).toLocaleTimeString('pt-BR')}</div>
+            <div class="mt-2">
+              <span class="inline-block px-3 py-1 rounded-full text-xs font-medium ${statusColor.bg} ${statusColor.text}">
+                ${order.status}
+              </span>
+            </div>
+          </div>
+          <div class="flex flex-col space-y-1 ml-4">
+            ${statusButtons}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateOrderStatus(orderId, newStatus) {
+  const idx = orders.findIndex(o => o.id === orderId);
+  if (idx !== -1) {
+    orders[idx].status = newStatus;
+    saveData();
+    updateActiveOrders();
+    updateTablesGrid();
+  }
+}
+
+function cancelOrder(orderId) {
+  if (!confirm('Tem certeza que deseja cancelar esse pedido?')) return;
+  const idx = orders.findIndex(o => o.id === orderId);
+  if (idx === -1) return;
+  orders[idx].status = 'Cancelado';
+  orders[idx].canceledAt = new Date().toISOString();
+
+  const ord = orders[idx];
+  if (tables[ord.tableNumber]) {
+    tables[ord.tableNumber].total = Math.max(0, (tables[ord.tableNumber].total || 0) - ord.total);
+    tables[ord.tableNumber].orders = tables[ord.tableNumber].orders.filter(o => o.id !== orderId);
+  }
+
+  saveData();
+  updateActiveOrders();
+  updateTablesGrid();
+
+  // Remove da lista após 5 minutos
+  setTimeout(() => {
+    const cur = JSON.parse(localStorage.getItem('restaurantOrders')) || [];
+    const filtered = cur.filter(o => o.id !== orderId);
+    localStorage.setItem('restaurantOrders', JSON.stringify(filtered));
+    orders = filtered;
+    updateActiveOrders();
+  }, 5 * 60 * 1000);
+}
+
+function clearOrdersDisplay() {
+  document.getElementById('activeOrders').innerHTML = '<p class="text-gray-500 text-center">Tela limpa - pedidos permanecem para relatórios</p>';
+}
+
+/* ===================== RELATÓRIOS ===================== */
+function setupDateFilters() {
+  const periodFilter = document.getElementById('periodFilter');
+  const customStart = document.getElementById('customDateStart');
+  const customEnd = document.getElementById('customDateEnd');
+  if (periodFilter.value === 'custom') {
+    customStart.classList.remove('hidden');
+    customEnd.classList.remove('hidden');
+    const today = new Date();
+    const weekAgo = new Date(); weekAgo.setDate(today.getDate() - 7);
+    document.getElementById('startDate').value = weekAgo.toISOString().split('T')[0];
+    document.getElementById('endDate').value = today.toISOString().split('T')[0];
+  } else {
+    customStart.classList.add('hidden');
+    customEnd.classList.add('hidden');
+  }
+}
+
+function parseReceivingRange() {
+  const filter = document.getElementById('receivingPeriodFilter').value;
+  const today = new Date();
+  let start, end;
+  if (filter === 'current-month') {
+    start = new Date(today.getFullYear(), today.getMonth(), 1);
+    end = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  } else if (filter === 'next-month') {
+    start = new Date(today.getFullYear(), today.getMonth()+1, 1);
+    end = new Date(today.getFullYear(), today.getMonth()+2, 0);
+  } else if (filter === 'next-3-months') {
+    start = new Date(today.getFullYear(), today.getMonth(), 1);
+    end = new Date(today.getFullYear(), today.getMonth()+3, 0);
+  } else if (filter === 'custom-receiving') {
+    const s = document.getElementById('receivingStartDate').value;
+    const e = document.getElementById('receivingEndDate').value;
+    start = s ? new Date(s) : new Date();
+    end = e ? new Date(e) : new Date();
+  } else {
+    start = new Date(today.getFullYear(), today.getMonth(), 1);
+    end = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  }
+  start.setHours(0,0,0,0);
+  end.setHours(23,59,59,999);
+  return { start, end };
+}
+
+function updateReceivingAnalysis() {
+  const { start, end } = parseReceivingRange();
+  const now = new Date();
+  let already = 0, toReceive = 0;
+  const breakdown = {};
+  tableHistory.forEach(h => {
+    const recv = new Date(h.receivingDate);
+    if (recv >= start && recv <= end) {
+      const val = h.total;
+      const pm = h.paymentMethod || 'N/D';
+      if (!breakdown[pm]) breakdown[pm] = 0;
+      breakdown[pm] += val;
+      if (recv <= now) already += val;
+      else toReceive += val;
+    }
+  });
+  document.getElementById('alreadyReceived').textContent = toBRL(already);
+  document.getElementById('toReceive').textContent = toBRL(toReceive);
+  document.getElementById('totalPeriodReceiving').textContent = toBRL(already+toReceive);
+
+  const mapName = { credito:'Cartão de Crédito', debito:'Cartão de Débito', pix:'PIX', dinheiro:'Dinheiro', 'N/D':'N/D' };
+  const parts = Object.entries(breakdown).map(([method,val]) => `<div>${mapName[method]||method}: ${toBRL(val)}</div>`);
+  document.getElementById('paymentMethodBreakdown').innerHTML = parts.join('');
+}
+
+function updateReports() {
+  // Mesas abertas
+  document.getElementById('openTablesReport').innerHTML = Object.keys(tables).length>0 ?
+    Object.keys(tables).map(n => `Mesa ${n} - ${tables[n].waiter}`).join('<br>') : 'Nenhuma mesa aberta';
+
+  // Período
+  let periodStart, periodEnd;
+  const period = document.getElementById('periodFilter').value;
+  const today = new Date();
+  if (period === 'today') {
+    periodStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    periodEnd = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+  } else if (period === 'week') {
+    const d = new Date(); d.setDate(today.getDate() - 7);
+    periodStart = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    periodEnd = new Date();
+  } else if (period === 'month') {
+    periodStart = new Date(today.getFullYear(), today.getMonth(), 1);
+    periodEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
+  } else if (period === 'year') {
+    periodStart = new Date(today.getFullYear(), 0, 1);
+    periodEnd = new Date(today.getFullYear(), 11, 31, 23, 59, 59, 999);
+  } else if (period === 'custom') {
+    const s = document.getElementById('startDate').value;
+    const e = document.getElementById('endDate').value;
+    periodStart = s ? new Date(s) : new Date(0);
+    periodEnd = e ? new Date(e) : new Date();
+    periodStart.setHours(0,0,0,0);
+    periodEnd.setHours(23,59,59,999);
+  } else {
+    periodStart = new Date(0);
+    periodEnd = new Date();
+  }
+
+  // Fechamentos no período
+  const historyInPeriod = tableHistory.filter(h => {
+    const close = new Date(h.closeTime);
+    return close >= periodStart && close <= periodEnd;
+  });
+
+  // Garçons mais ativos
+  const waiterCounts = {};
+  historyInPeriod.forEach(h => { waiterCounts[h.waiter] = (waiterCounts[h.waiter]||0) + 1; });
+  const sortedWaiters = Object.entries(waiterCounts).sort((a,b) => b[1] - a[1]).slice(0,5);
+  document.getElementById('activeWaiters').innerHTML =
+    sortedWaiters.length ? sortedWaiters.map(([waiter, count]) => `<div>${waiter}: ${count} mesa(s)</div>`).join('') : '<div>Sem dados</div>';
+
+  // Tempo médio de ocupação
+  if (historyInPeriod.length > 0) {
+    const totalMinutes = historyInPeriod.reduce((sum, h) => sum + (h.duration || 0), 0);
+    const avg = totalMinutes / historyInPeriod.length;
+    document.getElementById('averageOccupation').textContent = `~${Math.round(avg)} min`;
+  } else {
+    document.getElementById('averageOccupation').textContent = 'Sem dados';
+  }
+
+  // Fidelidade & clientes
+  const clients = {};
+  tableHistory.filter(h => h.customerName && h.total >= 0).forEach(h => {
+    const name = h.customerName;
+    clients[name] = clients[name] || { spent: 0 };
+    clients[name].spent += h.total;
+  });
+
+  const near = [];
+  const earned = [];
+  for (const [name, data] of Object.entries(clients)) {
+    const coupons = Math.floor(data.spent / 2000);
+    if (coupons > 0) earned.push({ name, coupons, spent: data.spent });
+    const remainder = data.spent % 2000;
+    near.push({ name, toNext: 2000 - remainder, spent: data.spent });
+  }
+  earned.sort((a,b)=>b.coupons - a.coupons);
+  near.sort((a,b)=>a.toNext - b.toNext);
+
+  const nearHtml = near.slice(0,5).map(c=>`<div>${c.name}: falta ${toBRL(c.toNext)} (já gastou ${toBRL(c.spent)})</div>`).join('');
+  const earnedHtml = earned.slice(0,5).map(c=>`<div>${c.name}: ${c.coupons} cupom(s) (${toBRL(c.spent)})</div>`).join('');
+  document.getElementById('loyaltyNearReward').innerHTML = nearHtml || '<div>Nenhum cliente próximo</div>';
+  document.getElementById('loyaltyRewardsEarned').innerHTML = earnedHtml || '<div>Nenhum cupom conquistado</div>';
+
+  // Recebimentos (com filtro próprio)
+  updateReceivingAnalysis();
+}
+
+/* ===================== TABS & EVENTOS ===================== */
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.add('hidden'));
+  document.querySelectorAll('.tab-button').forEach(b=> {
+    b.classList.remove('tab-active');
+    b.classList.add('tab-inactive');
+  });
+  document.getElementById(`content-${name}`).classList.remove('hidden');
+  const btn = document.querySelector(`[data-tab="${name}"]`);
+  if (btn) { btn.classList.remove('tab-inactive'); btn.classList.add('tab-active'); }
+  if (name==='relatorios') {
+    setupDateFilters();
+    updateReports();
+  } else if (name==='pedidos') {
+    updateOrderTableSelect();
+    updateActiveOrders();
+  }
+}
+
+// Delegação centralizada de cliques
+document.addEventListener('click', (e) => {
+  // Fechar mesa
+  const closeBtn = e.target.closest('[data-close-table]');
+  if (closeBtn) {
+    const n = parseInt(closeBtn.dataset.closeTable,10);
+    if (confirm('Tem certeza que deseja fechar essa mesa?')) {
+      const table = tables[n];
+      if (table) showPaymentModal(n, table);
+    }
+    return;
+  }
+  // Confirmar modal de fechamento
+  const confirmBtn = e.target.closest('[data-confirm-close]');
+  if (confirmBtn) {
+    const tableNum = parseInt(confirmBtn.dataset.confirmClose,10);
+    confirmTableClose(tableNum);
+    return;
+  }
+  // Fechar modal
+  if (e.target.closest('[data-close-modal]')) { closeModal(); return; }
+
+  // Pedidos: cancelar
+  const cancelBtn = e.target.closest('[data-cancel-order]');
+  if (cancelBtn) {
+    const id = parseInt(cancelBtn.dataset.cancelOrder,10);
+    cancelOrder(id);
+    return;
+  }
+  // Pedidos: mudar status
+  const updateBtn = e.target.closest('[data-update-status]');
+  if (updateBtn) {
+    try {
+      const obj = JSON.parse(updateBtn.dataset.updateStatus);
+      updateOrderStatus(obj.id, obj.to);
+    } catch {}
+    return;
+  }
+});
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.tab-button').forEach(b=> b.addEventListener('click', (e)=> {
+    const tab = e.currentTarget.getAttribute('data-tab');
+    showTab(tab);
+  }));
+  document.getElementById('openTableBtn').addEventListener('click', openTable);
+  document.getElementById('addOrderBtn').addEventListener('click', addOrder);
+  document.getElementById('clearOrdersBtn').addEventListener('click', () => {
+    document.getElementById('activeOrders').innerHTML = '<p class="text-gray-500 text-center">Tela limpa - pedidos permanecem para relatórios</p>';
+  });
+
+  document.getElementById('periodFilter').addEventListener('change', ()=> { setupDateFilters(); updateReports(); });
+  document.getElementById('updateReportsBtn').addEventListener('click', updateReports);
+
+  document.getElementById('receivingPeriodFilter').addEventListener('change', ()=> {
+    const val = document.getElementById('receivingPeriodFilter').value;
+    document.getElementById('customReceivingDates').classList.toggle('hidden', val!=='custom-receiving');
+    updateReceivingAnalysis();
+  });
+  document.getElementById('receivingStartDate').addEventListener('change', updateReceivingAnalysis);
+  document.getElementById('receivingEndDate').addEventListener('change', updateReceivingAnalysis);
+
+  updateDateTime(); setInterval(updateDateTime,60000);
+  updateTablesGrid();
+  updateOrderTableSelect();
+  updateActiveOrders();
+  updateReports(); // já carrega estatísticas
+});
+</script>
+</body>
+</html>
