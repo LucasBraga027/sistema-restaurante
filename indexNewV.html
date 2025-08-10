@@ -40,10 +40,14 @@
   <!-- Tabs -->
   <nav class="bg-white shadow-md">
     <div class="container mx-auto">
-      <div class="flex space-x-0">
-        <button data-tab="mesas" class="tab-button px-6 py-3 font-medium rounded-t-lg tab-active">Gerenciar Mesas</button>
-        <button data-tab="pedidos" class="tab-button px-6 py-3 font-medium rounded-t-lg tab-inactive">Pedidos</button>
-        <button data-tab="relatorios" class="tab-button px-6 py-3 font-medium rounded-t-lg tab-inactive">Relatórios</button>
+      <div class="flex flex-wrap">
+        <button data-tab="mesas" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-active">Gerenciar Mesas</button>
+        <button data-tab="pedidos" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Pedidos</button>
+        <button data-tab="relatorios" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Relatórios</button>
+        <button data-tab="fluxo" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Fluxo de Caixa</button>
+        <button data-tab="apagar" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Contas a Pagar</button>
+        <button data-tab="abc" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Análise ABC</button>
+        <button data-tab="estoque" class="tab-button px-4 py-3 font-medium rounded-t-lg tab-inactive">Estoque</button>
       </div>
     </div>
   </nav>
@@ -65,7 +69,7 @@
               <label class="block text-sm font-medium text-gray-700 mb-2">Número da Mesa</label>
               <input type="number" id="tableNumber" class="w-full px-4 py-2 border border-gray-300 rounded-full" placeholder="Ex: 1, 2, 3...">
             </div>
-            <button id="openTableBtn" class="w-full bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full transition duration-200">
+            <button id="openTableBtn" class="w-full bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full">
               Abrir Mesa
             </button>
           </div>
@@ -96,12 +100,12 @@
               <label class="block text-sm font-medium text-gray-700 mb-2">Prato</label>
               <select id="dishSelect" class="w-full px-4 py-2 border border-gray-300 rounded-full">
                 <option value="">Selecione um prato</option>
-                <option value="Hambúrguer Clássico">Hambúrguer Clássico - R$ 25,00</option>
-                <option value="Pizza Margherita">Pizza Margherita - R$ 35,00</option>
-                <option value="Lasanha Bolonhesa">Lasanha Bolonhesa - R$ 28,00</option>
-                <option value="Salmão Grelhado">Salmão Grelhado - R$ 45,00</option>
-                <option value="Risotto de Camarão">Risotto de Camarão - R$ 38,00</option>
-                <option value="Bife à Parmegiana">Bife à Parmegiana - R$ 32,00</option>
+                <option value="Hambúrguer Clássico" data-price="25">Hambúrguer Clássico - R$ 25,00</option>
+                <option value="Pizza Margherita" data-price="35">Pizza Margherita - R$ 35,00</option>
+                <option value="Lasanha Bolonhesa" data-price="28">Lasanha Bolonhesa - R$ 28,00</option>
+                <option value="Salmão Grelhado" data-price="45">Salmão Grelhado - R$ 45,00</option>
+                <option value="Risotto de Camarão" data-price="38">Risotto de Camarão - R$ 38,00</option>
+                <option value="Bife à Parmegiana" data-price="32">Bife à Parmegiana - R$ 32,00</option>
               </select>
             </div>
             <div>
@@ -177,10 +181,10 @@
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-6 border-l-4 border-restaurant-yellow">
-          <h2 class="text-xl font-bold text-restaurant-dark mb-4">🍽️ Fidelidade & Clientes</h2>
+          <h2 class="text-xl font-bold text-restaurant-dark mb-4">🎁 Fidelidade & Clientes</h2>
           <div class="space-y-4">
             <div class="bg-gray-50 p-4 rounded-lg">
-              <h3 class="font-semibold text-gray-700">Clientes Próximos ao Cupom (gasto &lt; 2000)</h3>
+              <h3 class="font-semibold text-gray-700">Clientes Próximos ao Cupom</h3>
               <div id="loyaltyNearReward" class="text-sm text-gray-600"></div>
             </div>
             <div class="bg-gray-50 p-4 rounded-lg">
@@ -232,17 +236,88 @@
         </div>
       </div>
     </div>
+
+    <!-- FLUXO DE CAIXA -->
+    <div id="content-fluxo" class="tab-content hidden">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-restaurant-dark mb-4">💸 Fluxo de Caixa</h2>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+          <input type="date" id="cashStart" class="px-4 py-2 border rounded-full">
+          <input type="date" id="cashEnd" class="px-4 py-2 border rounded-full">
+          <input type="text" id="cfCategory" placeholder="Categoria (opcional)" class="px-4 py-2 border rounded-full">
+          <input type="number" step="0.01" id="cfAmount" placeholder="Valor (+ = entrada, - = saída)" class="px-4 py-2 border rounded-full">
+          <button id="cfAddBtn" class="bg-restaurant-yellow hover:bg-yellow-500 text-restaurant-dark font-bold py-2 px-4 rounded-full">Lançar Manual</button>
+        </div>
+        <div id="cashflowGrid" class="space-y-2 text-sm"></div>
+      </div>
+    </div>
+
+    <!-- CONTAS A PAGAR -->
+    <div id="content-apagar" class="tab-content hidden">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-restaurant-dark mb-4">📄 Contas a Pagar</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <input id="apVendor" placeholder="Fornecedor" class="px-4 py-2 border rounded-full">
+          <input id="apDue" type="date" class="px-4 py-2 border rounded-full">
+          <input id="apAmount" type="number" step="0.01" placeholder="Valor" class="px-4 py-2 border rounded-full">
+          <button id="apCreateBtn" class="bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Lançar Conta</button>
+        </div>
+        <div id="apList" class="space-y-2 text-sm"></div>
+      </div>
+    </div>
+
+    <!-- ANÁLISE ABC -->
+    <div id="content-abc" class="tab-content hidden">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-restaurant-dark mb-4">🔤 Análise ABC</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <input type="date" id="abcStart" class="px-4 py-2 border rounded-full">
+          <input type="date" id="abcEnd" class="px-4 py-2 border rounded-full">
+          <button id="abcUpdateBtn" class="bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Atualizar</button>
+        </div>
+        <div id="abcTable" class="text-sm"></div>
+      </div>
+    </div>
+
+    <!-- ESTOQUE -->
+    <div id="content-estoque" class="tab-content hidden">
+      <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-restaurant-dark mb-4">📦 Controle de Estoque</h2>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+          <input id="stkSearch" placeholder="Buscar/Selecionar item..." class="px-4 py-2 border rounded-full">
+          <input id="stkUnit" placeholder="Unid. (ex: kg, un)" class="px-4 py-2 border rounded-full">
+          <button id="stkNewItem" class="bg-restaurant-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">Novo Item</button>
+          <select id="stkType" class="px-4 py-2 border rounded-full">
+            <option value="in">Entrada</option>
+            <option value="out">Saída</option>
+            <option value="adjust">Ajuste</option>
+          </select>
+          <div class="flex gap-2">
+            <input id="stkQty" type="number" step="0.01" placeholder="Qtd" class="px-4 py-2 border rounded-full w-full">
+            <button id="stkLaunch" class="bg-restaurant-yellow hover:bg-yellow-500 text-restaurant-dark font-bold py-2 px-4 rounded-full">Lançar</button>
+          </div>
+        </div>
+        <div id="stkList" class="space-y-1 text-sm"></div>
+      </div>
+    </div>
   </main>
 </div>
 
 <!-- Modal -->
 <div id="modalContainer"></div>
+
 <script>
 /* ===================== ESTADO & UTIL ===================== */
 let tables = JSON.parse(localStorage.getItem('restaurantTables')) || {};
 let orders = JSON.parse(localStorage.getItem('restaurantOrders')) || [];
 let orderCounter = parseInt(localStorage.getItem('orderCounter')) || 1;
 let tableHistory = JSON.parse(localStorage.getItem('tableHistory')) || [];
+
+// novos módulos (passo 2):
+let cfEntries = JSON.parse(localStorage.getItem('cfEntries')) || [];          // fluxo de caixa manual
+let apEntries = JSON.parse(localStorage.getItem('apEntries')) || [];          // contas a pagar
+let invItems  = JSON.parse(localStorage.getItem('invItems'))  || [];          // itens de estoque
+let invMoves  = JSON.parse(localStorage.getItem('invMoves'))  || [];          // movimentos
 
 const dishPrices = {
   'Hambúrguer Clássico': 25.00,
@@ -258,6 +333,10 @@ function saveData() {
   localStorage.setItem('restaurantOrders', JSON.stringify(orders));
   localStorage.setItem('orderCounter', orderCounter.toString());
   localStorage.setItem('tableHistory', JSON.stringify(tableHistory));
+  localStorage.setItem('cfEntries', JSON.stringify(cfEntries));
+  localStorage.setItem('apEntries', JSON.stringify(apEntries));
+  localStorage.setItem('invItems', JSON.stringify(invItems));
+  localStorage.setItem('invMoves', JSON.stringify(invMoves));
 }
 
 function toBRL(n){ return 'R$ ' + Number(n||0).toFixed(2); }
@@ -358,6 +437,7 @@ function confirmTableClose(tableNumber) {
   const duration = Math.floor((new Date(closeTime)-openTime)/(1000*60));
   const receivingDate = calculateReceivingDate(paymentMethod, closeTime);
 
+  // salva no histórico
   tableHistory.push({
     tableNumber,
     waiter: table.waiter,
@@ -371,12 +451,14 @@ function confirmTableClose(tableNumber) {
     receivingDate
   });
 
+  // apaga mesa
   delete tables[tableNumber];
   saveData();
   closeModal();
   updateTablesGrid();
   updateActiveOrders();
-  updateReports();              // <- garante atualização imediata
+  updateReports();
+  // fluxo de caixa: entrada será considerados pelos recebimentos (não lança duplicado aqui)
   alert(`Mesa ${tableNumber} fechada com sucesso! Total: ${toBRL(table.total)}`);
 }
 
@@ -408,11 +490,12 @@ function closeModal() {
 /* ===================== PEDIDOS ===================== */
 function addOrder() {
   const tableNumber = document.getElementById('orderTableSelect').value;
-  const dish = document.getElementById('dishSelect').value;
+  const dishSel = document.getElementById('dishSelect');
+  const dish = dishSel.value;
+  const price = Number(dishSel.selectedOptions[0]?.dataset.price || dishPrices[dish] || 0);
   const quantity = parseInt(document.getElementById('quantity').value,10);
   if (!tableNumber || !dish || !quantity) { alert('Preencha todos'); return; }
 
-  const price = dishPrices[dish] || 0;
   const total = price * quantity;
   const order = {
     id: orderCounter++,
@@ -708,6 +791,203 @@ function updateReports() {
   updateReceivingAnalysis();
 }
 
+/* ===================== FLUXO DE CAIXA ===================== */
+/* Lógica: Entradas = (1) recebimentos de vendas por receivingDate (tableHistory) + (2) cfEntries positivos.
+   Saídas = (1) cfEntries negativos + (2) AP pagas (paidAt).  */
+function refreshCashflow(){
+  const s = new Date(document.getElementById('cashStart').value);
+  const e = new Date(document.getElementById('cashEnd').value);
+  if (!s || !e || isNaN(+s) || isNaN(+e)) return;
+
+  const dayKey = d => new Date(d.getFullYear(), d.getMonth(), d.getDate()).toISOString().slice(0,10);
+  const map = {}; // key: yyyy-mm-dd => {in, out}
+
+  // Recebimentos de vendas
+  tableHistory.forEach(h=>{
+    const d=new Date(h.receivingDate);
+    if (d>=s && d<=e) {
+      const k=dayKey(d);
+      map[k] = map[k] || {in:0,out:0};
+      map[k].in += Number(h.total)||0;
+    }
+  });
+
+  // Lançamentos manuais (cfEntries)
+  cfEntries.forEach(c=>{
+    const d=new Date(c.date);
+    if (d>=s && d<=e) {
+      const k=dayKey(d);
+      map[k] = map[k] || {in:0,out:0};
+      if (c.amount >= 0) map[k].in  += Number(c.amount)||0;
+      else               map[k].out += Math.abs(Number(c.amount)||0);
+    }
+  });
+
+  // Contas pagas
+  apEntries.filter(a=>a.status==='paid' && a.paidAt).forEach(a=>{
+    const d=new Date(a.paidAt);
+    if (d>=s && d<=e) {
+      const k=dayKey(d);
+      map[k] = map[k] || {in:0,out:0};
+      map[k].out += Number(a.amount)||0;
+    }
+  });
+
+  const days=Object.keys(map).sort();
+  const html = days.length ? days.map(k=>{
+    const incoming = map[k].in||0, outgoing = map[k].out||0, net = incoming - outgoing;
+    return `<div class="flex justify-between bg-gray-50 p-2 rounded">
+      <span>${k.split('-').reverse().join('/')}</span>
+      <span>Entrada: ${toBRL(incoming)} | Saída: ${toBRL(outgoing)} | Saldo: ${toBRL(net)}</span>
+    </div>`;
+  }).join('') : '<div class="text-gray-500">Sem lançamentos no período.</div>';
+
+  document.getElementById('cashflowGrid').innerHTML = html;
+}
+
+function addCashflowManual(){
+  const val = Number(document.getElementById('cfAmount').value);
+  if (!val) return alert('Informe um valor (positivo=entrada, negativo=saída).');
+  const cat = document.getElementById('cfCategory').value.trim() || 'Manual';
+  cfEntries.push({ id: Date.now(), date: new Date().toISOString(), amount: val, category: cat });
+  document.getElementById('cfAmount').value=''; document.getElementById('cfCategory').value='';
+  saveData(); refreshCashflow();
+}
+
+/* ===================== CONTAS A PAGAR ===================== */
+function refreshAP(){
+  // marca vencidas
+  const today = new Date();
+  apEntries.forEach(a=>{
+    if (a.status==='open' && new Date(a.dueDate) < new Date(today.toDateString())) a.status='overdue';
+  });
+  saveData();
+
+  const list = apEntries.slice().sort((a,b)=> new Date(a.dueDate)-new Date(b.dueDate));
+  document.getElementById('apList').innerHTML = list.length ? list.map(a=>`
+    <div class="flex items-center justify-between bg-gray-50 p-2 rounded">
+      <div>${a.vendor} — vence ${new Date(a.dueDate).toLocaleDateString('pt-BR')} — ${toBRL(a.amount)} — <span class="${a.status==='overdue'?'text-red-600 font-semibold':''}">${a.status}</span></div>
+      ${a.status!=='paid' ? `<button data-ap-pay="${a.id}" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-full text-xs">Pagar</button>`:''}
+    </div>`).join('') : '<div class="text-gray-500">Nenhuma conta cadastrada.</div>';
+}
+
+function createAP(){
+  const vendor=document.getElementById('apVendor').value.trim();
+  const due=document.getElementById('apDue').value;
+  const amt=Number(document.getElementById('apAmount').value);
+  if(!vendor||!due||!amt) return alert('Preencha fornecedor, vencimento e valor.');
+  apEntries.push({ id: Date.now(), vendor, dueDate: due, amount: amt, status:'open', paidAt:null });
+  document.getElementById('apVendor').value=''; document.getElementById('apAmount').value='';
+  saveData(); refreshAP();
+}
+
+function payAP(id){
+  const idx=apEntries.findIndex(a=>a.id==id);
+  if (idx<0) return;
+  apEntries[idx].status='paid';
+  apEntries[idx].paidAt=new Date().toISOString();
+  saveData(); refreshAP(); refreshCashflow();
+}
+
+/* ===================== ABC ===================== */
+function refreshABC(){
+  const s = new Date(document.getElementById('abcStart').value);
+  const e = new Date(document.getElementById('abcEnd').value);
+  if (!s || !e || isNaN(+s) || isNaN(+e)) return;
+
+  // consolida vendas do histórico (fechadas) no intervalo por produto
+  const sales = {};
+  tableHistory.forEach(h=>{
+    const closed=new Date(h.closeTime);
+    if (closed>=s && closed<=e && Array.isArray(h.orders)) {
+      h.orders.forEach(o=>{
+        const name=o.dish || o.name || '(pedido)';
+        const qty = Number(o.quantity||o.qty||0);
+        const val = Number(qty * (o.price || dishPrices[name] || 0));
+        if (!sales[name]) sales[name]={units:0,value:0};
+        sales[name].units += qty;
+        sales[name].value += val;
+      });
+    }
+  });
+
+  const rows = Object.entries(sales).map(([name,v])=>({name, ...v}))
+                .sort((a,b)=>b.value-a.value);
+
+  const totalValue = rows.reduce((s,x)=>s+x.value,0);
+  let running=0;
+  rows.forEach(r=>{ running += r.value; r.cumPct = totalValue? (running/totalValue)*100 : 0;
+    r.cls = r.cumPct<=80 ? 'A' : r.cumPct<=95 ? 'B' : 'C';
+    // estoque atual (se existir item com mesmo nome)
+    const it = invItems.find(i=>i.name.toLowerCase()===r.name.toLowerCase());
+    r.stock = it ? (Number(it.qty)||0) + ' ' + (it.unit||'') : '-';
+  });
+
+  document.getElementById('abcTable').innerHTML = rows.length ? `
+    <div class="grid grid-cols-6 font-semibold mb-2"><div>Produto</div><div>Unidades</div><div>Valor</div><div>% Acum.</div><div>Classe</div><div>Estoque</div></div>
+    ${rows.map(x=>`
+      <div class="grid grid-cols-6 border-b py-1">
+        <div>${x.name}</div>
+        <div>${x.units}</div>
+        <div>${toBRL(x.value)}</div>
+        <div>${x.cumPct.toFixed(1)}%</div>
+        <div>${x.cls}</div>
+        <div>${x.stock}</div>
+      </div>`).join('')}
+  ` : '<div class="text-gray-500">Sem dados no período.</div>';
+}
+
+/* ===================== ESTOQUE ===================== */
+function ensureSampleStock(){
+  if (invItems.length===0){
+    invItems = [
+      { id: Date.now()-1, sku:'HAM001', name:'Hambúrguer Clássico', unit:'un', qty: 20 },
+      { id: Date.now()-2, sku:'PIZ001', name:'Pizza Margherita', unit:'un', qty: 15 }
+    ];
+    saveData();
+  }
+}
+
+function renderStockList(){
+  const term=(document.getElementById('stkSearch').value||'').toLowerCase();
+  const view=invItems.filter(i=>!term || i.name.toLowerCase().includes(term) || (i.sku||'').toLowerCase().includes(term));
+  document.getElementById('stkList').innerHTML = view.length ? view.map(i=>`
+    <div class="flex justify-between bg-gray-50 p-2 rounded">
+      <span><b>${i.name}</b> ${i.sku?`<span class="text-gray-500">(${i.sku})</span>`:''} — ${i.qty} ${i.unit||''}</span>
+      <button data-stk-pick='${JSON.stringify(i)}' class="bg-restaurant-blue hover:bg-blue-700 text-white px-3 py-1 rounded-full text-xs">Selecionar</button>
+    </div>`).join('') : '<div class="text-gray-500">Nenhum item encontrado.</div>';
+}
+
+let selectedItem=null;
+function createNewItem(){
+  const name=(document.getElementById('stkSearch').value||'').trim();
+  const unit=(document.getElementById('stkUnit').value||'').trim();
+  if (!name) return alert('Digite um nome no campo de busca para criar o item.');
+  const exists = invItems.some(i=>i.name.toLowerCase()===name.toLowerCase());
+  if (exists) return alert('Já existe um item com esse nome. Selecione-o na lista.');
+  const it = { id: Date.now(), sku: null, name, unit: unit||'un', qty: 0 };
+  invItems.push(it); saveData(); renderStockList();
+  alert('Item criado. Agora selecione e lance a movimentação.');
+}
+
+function launchStockMove(){
+  if (!selectedItem) return alert('Selecione um item na lista.');
+  const type=document.getElementById('stkType').value;
+  const qty=Number(document.getElementById('stkQty').value);
+  if (!qty) return alert('Informe a quantidade.');
+  invMoves.push({ id: Date.now(), itemId: selectedItem.id, type, qty, reason:'App', createdAt:new Date().toISOString() });
+  // aplica saldo
+  const idx=invItems.findIndex(i=>i.id===selectedItem.id);
+  if (idx>-1){
+    if (type==='in' || type==='adjust') invItems[idx].qty = Number(invItems[idx].qty||0) + qty;
+    else invItems[idx].qty = Number(invItems[idx].qty||0) - qty;
+    if (invItems[idx].qty<0) invItems[idx].qty=0;
+  }
+  selectedItem=null; document.getElementById('stkQty').value='';
+  saveData(); renderStockList();
+  alert('Movimentação registrada!');
+}
+
 /* ===================== TABS & EVENTOS ===================== */
 function showTab(name) {
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.add('hidden'));
@@ -724,6 +1004,14 @@ function showTab(name) {
   } else if (name==='pedidos') {
     updateOrderTableSelect();
     updateActiveOrders();
+  } else if (name==='fluxo') {
+    refreshCashflow();
+  } else if (name==='apagar') {
+    refreshAP();
+  } else if (name==='abc') {
+    refreshABC();
+  } else if (name==='estoque') {
+    renderStockList();
   }
 }
 
@@ -765,6 +1053,14 @@ document.addEventListener('click', (e) => {
     } catch {}
     return;
   }
+
+  // AP: pagar
+  const apPay=e.target.closest('[data-ap-pay]');
+  if (apPay){ payAP(Number(apPay.dataset.apPay)); return; }
+
+  // Estoque: selecionar item
+  const sel=e.target.closest('[data-stk-pick]');
+  if(sel){ selectedItem=JSON.parse(sel.dataset.stkPick); document.getElementById('stkSearch').value=selectedItem.name; return; }
 });
 
 // Inicialização
@@ -775,9 +1071,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }));
   document.getElementById('openTableBtn').addEventListener('click', openTable);
   document.getElementById('addOrderBtn').addEventListener('click', addOrder);
-  document.getElementById('clearOrdersBtn').addEventListener('click', () => {
-    document.getElementById('activeOrders').innerHTML = '<p class="text-gray-500 text-center">Tela limpa - pedidos permanecem para relatórios</p>';
-  });
+  document.getElementById('clearOrdersBtn').addEventListener('click', clearOrdersDisplay);
 
   document.getElementById('periodFilter').addEventListener('change', ()=> { setupDateFilters(); updateReports(); });
   document.getElementById('updateReportsBtn').addEventListener('click', updateReports);
@@ -790,12 +1084,46 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('receivingStartDate').addEventListener('change', updateReceivingAnalysis);
   document.getElementById('receivingEndDate').addEventListener('change', updateReceivingAnalysis);
 
+  // Fluxo de caixa
+  document.getElementById('cfAddBtn').addEventListener('click', addCashflowManual);
+  document.getElementById('cashStart').addEventListener('change', refreshCashflow);
+  document.getElementById('cashEnd').addEventListener('change', refreshCashflow);
+
+  // Contas a pagar
+  document.getElementById('apCreateBtn').addEventListener('click', createAP);
+
+  // ABC
+  document.getElementById('abcUpdateBtn').addEventListener('click', refreshABC);
+
+  // Estoque
+  ensureSampleStock();
+  document.getElementById('stkSearch').addEventListener('input', renderStockList);
+  document.getElementById('stkNewItem').addEventListener('click', createNewItem);
+  document.getElementById('stkLaunch').addEventListener('click', launchStockMove);
+
+  // datas default
+  const today=new Date(); const weekAgo=new Date(); weekAgo.setDate(today.getDate()-7);
+  document.getElementById('cashStart').value = weekAgo.toISOString().split('T')[0];
+  document.getElementById('cashEnd').value   = today.toISOString().split('T')[0];
+  document.getElementById('abcStart').value  = weekAgo.toISOString().split('T')[0];
+  document.getElementById('abcEnd').value    = today.toISOString().split('T')[0];
+
   updateDateTime(); setInterval(updateDateTime,60000);
   updateTablesGrid();
   updateOrderTableSelect();
   updateActiveOrders();
-  updateReports(); // já carrega estatísticas
+  updateReports();
+  refreshCashflow();
+  refreshAP();
+  refreshABC();
+  renderStockList();
 });
+
+// compat legacy (se chamar no HTML por acidente)
+window.cancelOrder = cancelOrder;
+window.updateOrderStatus = updateOrderStatus;
+window.confirmTableClose = confirmTableClose;
+window.closeModal = closeModal;
 </script>
 </body>
 </html>
